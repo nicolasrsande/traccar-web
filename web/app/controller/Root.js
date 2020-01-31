@@ -227,7 +227,12 @@ Ext.define('Traccar.controller.Root', {
         };
 
         socket.onmessage = function (event) {
-            var data = Ext.decode(event.data);
+            var i, store, entity, data = Ext.decode(event.data);
+
+            if (data.geofences || data.geofencesRemoved) {
+                store = Ext.getStore('Geofences');
+                store.load();
+            }
 
             if (data.devices) {
                 self.updateDevices(data.devices);
